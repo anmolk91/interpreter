@@ -1,0 +1,69 @@
+--------Function displayHireList--------
+
+No of candidates required to cover all languages: 4
+Venkat / English / Kannada / Tamil / Telugu
+Paul / Tamil / Telugu / Malayalam / Marathi
+Harish / English / Hindi / Punjabi / Gujarati
+Nisha / English / Hindi / Marathi / Bengali
+
+
+
+--------Function displayCandidates --------
+
+List of Candidates who can speak Hindi:
+
+Manasa
+
+Harish
+
+Nisha
+
+Amjad
+
+Parul
+
+Zubin
+
+--------Function displayCandidates --------
+
+List of Candidates who can speak Tamil:
+
+Venkat
+
+Paul
+
+Rohan
+
+Surya
+
+--------Function findDirectTranslator --------
+
+Language A: English
+
+Language B: Malayalam
+
+Direct Translator: No
+
+--------Function findDirectTranslator --------
+
+Language A: Hindi
+
+Language B: Gujarati
+
+Direct Translator: Yes, Harish can translate
+
+--------Function findTransRelation --------
+
+Language A: English
+
+Language B: Malayalam
+
+Related: Yes, English > Manasa > Hindi > Nisha > Marathi > Paul > Malayalam 
+
+--------Function findTransRelation --------
+
+Language A: English
+
+Language B: Gujarati
+
+Related: Yes, English > Manasa > Hindi > Harish > Gujarati 

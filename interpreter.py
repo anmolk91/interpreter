@@ -1,37 +1,46 @@
 import copy
 from functools import reduce
+from node import Node
+from linkedlist import LinkedList
 
 class Interpreter:
     vertices = []
     edges = []
-    actions = []
-    output = ''
+    edgesList = None
 
-    def readApplication(self, inputfile):
-        if inputfile == '' or inputfile == None:
-            return
-
-        fileContent = self.getFileContent(inputfile, 'r')
-        self.processData(fileContent)
+    def readApplication(self, inputfile = 'inputPS7.txt', promptsFile = 'promptsPS7.txt'):
+        inputFileContent = self.getFileContent(inputfile, 'r')
+        promptsFileContent = self.getFileContent(promptsFile, 'r')
+        self.processInputData(inputFileContent)
+        self.processPromptsData(promptsFileContent)
 
     def getFileContent(self, filePath, mode):
         with open(filePath, mode) as my_file:
             return my_file.read()
 
-    def processData(self, unformattedData):
+    def processInputData(self, unformattedData):
         tempList = unformattedData.split('\n')
         rawNodes = copy.copy(list(self.filterRawNodes(tempList)))
-        self.actions = self.filterActions(tempList)
         self.vertices = self.createVertices(rawNodes)
         self.edges = self.createEdges(rawNodes, self.vertices)
+        self.createEdgesList(rawNodes, self.vertices)
 
-    def filterActions(self, rawDataList):
-        actions = ['showAll']
-        actionsToBeProcessed = []
+    def processPromptsData(self, unformattedPromptsData):
+        tempList = unformattedPromptsData.split('\n')
+        self.executeActions(tempList)
+
+    def executeActions(self, rawDataList):
         for dataItem in rawDataList:
-            if dataItem in actions:
-                actionsToBeProcessed.append(dataItem)
-        return actionsToBeProcessed
+            if ('showMinList' in dataItem):
+                self.displayHireList()
+            elif ('searchLanguage' in dataItem):
+                self.displayCandidates(dataItem.split(':')[1].strip())
+            elif ('DirectTranslate' in dataItem):
+                argsList = dataItem.split(':')
+                self.findDirectTranslator(argsList[1].strip(), argsList[2].strip())
+            elif ('TransRelation' in dataItem):
+                argsList = dataItem.split(':')
+                self.findTransRelation(argsList[1].strip(), argsList[2].strip())
 
     def filterRawNodes(self, data):
         def filterFun(str):
@@ -71,6 +80,28 @@ class Interpreter:
                     temp = key
 
         return edges
+
+    def createEdgesList(self, rawEdgesList, vertices):
+        def createsList(item):
+            tempObj = { 'name': item['value'].strip(), 'listVal': LinkedList() }
+            tempNode = Node({ 'value': item['value']})
+            tempObj['listVal'].addNode(tempNode)
+            return tempObj
+        self.edgesList = [createsList(item) for item in vertices]
+        for item in rawEdgesList:
+            nodesName = [i.strip() for i in item.split('/')]
+            parentVal = None
+            parentLinkedList = None
+            childNode = None
+            for index, item in enumerate(nodesName):
+                if (index != 0):
+                    childNode = Node({'value': item})
+                    childNodeList = next((edge for edge in self.edgesList if item.strip() == edge['name']), None)['listVal']
+                    childNodeList.addNode(Node({'value': parentVal}))
+                    parentLinkedList.addNode(childNode)
+                else:
+                    parentVal = item
+                    parentLinkedList = next((edge for edge in self.edgesList if item.strip() == edge['name']), None)['listVal']
         
     def showAll(self):
         (filteredInterpreters, filteredLanguages) = (self.getFilteredInterpreters(self.vertices), self.getFilteredLanguages(self.vertices))
@@ -82,7 +113,10 @@ class Interpreter:
         output += '\n\n\nList of languages:'
         for language in filteredLanguages:
             output += '\n\n'+ language['value'].title()
+        analysisOutput = '\n\n--------Function showAll--------\n\nWorst Complexity will be O(n) where n is the total no of nodes'
         self.printOutput(output)
+        self.printAnalysis(analysisOutput)
+
 
     def getFilteredInterpreters(self, data):
         def filterInterPreters(dataItem):
@@ -122,6 +156,7 @@ class Interpreter:
             output += '\n' + response['value'].title() + ' / ' + ' / '.join(response['languages'])
         output += '\n\n'
         self.printOutput(output)
+        self.printAnalysis()
 
     def displayCandidates(self, language):
         vertex = next((node for node in self.vertices if node['value'].lower() == language.strip().lower()), None)
@@ -134,7 +169,7 @@ class Interpreter:
                 outputStr += '\n\n{name}'.format(name = outputDataItem['value'].title())
             self.printOutput(outputStr)
 
-    def findTransRelation(self, langA, langB):
+    def findDirectTranslator(self, langA, langB):
         langA = langA.strip()
         langB = langB.strip()
         def addVisited(item):
@@ -144,7 +179,6 @@ class Interpreter:
         source = next((language for language in verticesCopy if language['value'] == langA), None)
         destination = next((language for language in verticesCopy if language['value'] == langB), None)
         if source != None and destination != None:
-            
             pathNode = self.findPath(source, destination, copy.deepcopy(self.vertices), self.edges)
             output = '\n\n--------Function findDirectTranslator --------\n\nLanguage A: {langA}\n\nLanguage B: {langB}\n\nDirect Translator: '.format(langA = langA, langB = langB)
             if pathNode != None:
@@ -155,6 +189,51 @@ class Interpreter:
         else:
             output = '\n\n--------Function findDirectTranslator --------\n\nWrong Input either {langA} or {langB} not found.'.format(langA = langA, langB = langB)
             self.printOutput(output)
+
+    def findTransRelation(self, langA, langB):
+        cloneEdgesList = copy.deepcopy(self.edgesList)
+        for edgeNode in cloneEdgesList:
+                listVal = edgeNode['listVal']
+                listNode = listVal.head
+                while (listNode != None):
+                    listNode.val['visited'] = False
+                    listNode = listNode.next
+
+        source = next((edge for edge in cloneEdgesList if edge['name'] == langA), None)
+        respList = []
+        pathFound = False
+        self.findTransRelationPath(cloneEdgesList, source, langB, respList)
+        if (len(respList) != 0):
+            respList.insert(0, source['name'])
+            pathFound = True
+        output = '\n\n--------Function findTransRelation --------\n\nLanguage A: {langA}\n\nLanguage B: {langB}\n\nRelated: No, unfortunately no path found'.format(langA = langA, langB = langB)
+        if pathFound == True:
+            output = '\n\n--------Function findTransRelation --------\n\nLanguage A: {langA}\n\nLanguage B: {langB}\n\nRelated: Yes, {path} '.format(langA = langA, langB = langB, path = " > ".join(respList))
+        self.printOutput(output)
+        
+        
+
+    def findTransRelationPath(self, edgesList, sourceNode, destinationLang, pathArr):
+        itrList = sourceNode['listVal']
+        itrNode = itrList.head.next
+        itrList.head.val['visited'] = True
+        while(itrNode != None):
+            if itrNode.val['visited'] == False:
+                itrNode.val['visited'] = True
+                if itrNode.val['value'] == destinationLang:
+                    pathArr.insert(0, itrNode.val['value'])
+                    return True
+                else:
+                    nextNode = next((edge for edge in edgesList if edge['name'] == itrNode.val['value']))
+                    val = self.findTransRelationPath(edgesList, nextNode , destinationLang, pathArr)
+                    if (val):
+                        pathArr.insert(0, itrNode.val['value'])
+                        return True
+            else:
+                return False
+            itrNode = itrNode.next
+        return pathArr
+        
 
 
     def findPath(self, source, destination, vertices, edges):
@@ -168,5 +247,9 @@ class Interpreter:
 
 
     def printOutput(self, output):
-        with open('output.txt', 'a') as outputFile:
+        with open('outputPS7.txt', 'a') as outputFile:
+            outputFile.write(output)
+
+    def printAnalysis(self, analysisOutput):
+        with open('analysisPS7.txt', 'a') as outputFile:
             outputFile.write(output)

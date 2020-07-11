@@ -1,0 +1,7 @@
+showMinList
+searchLanguage: Hindi
+searchLanguage: Tamil
+DirectTranslate: English : Malayalam
+DirectTranslate: Hindi : Gujarati
+TransRelation: English : Malayalam
+TransRelation: English : Gujarati

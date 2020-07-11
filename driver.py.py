@@ -1,10 +1,7 @@
 from interpreter import Interpreter
 
-def driverMethod(pathName):
+def driverMethod():
     interpretersData = Interpreter()
-    interpretersData.readApplication(pathName)
-    # print(interpretersData.edges)
-    # print(interpretersData.vertices)
-    interpretersData.findTransRelation('Hindi   ', '  Gujarati   ')
+    interpretersData.readApplication()
 
-driverMethod('hello-world.txt')
+driverMethod()
