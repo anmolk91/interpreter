@@ -22,7 +22,16 @@ class Interpreter:
         inputFileContent = self.getFileContent(inputFile, 'r')
         promptsFileContent = self.getFileContent(promptsFile, 'r')
         self.processInputData(inputFileContent)
+        self.clearOutputAndAnalysisFile()
         self.processPromptsData(promptsFileContent)
+
+    def clearOutputAndAnalysisFile(self):
+        with open('outputPS7.txt', 'w') as outputFile:
+            outputFile.seek(0)
+            outputFile.truncate()
+        with open('analysisPS7.txt', 'w') as analysisOutputFile:
+            analysisOutputFile.seek(0)
+            analysisOutputFile.truncate()
 
     def getFileContent(self, filePath, mode):
         """
@@ -155,6 +164,7 @@ class Interpreter:
         for language in filteredLanguages:
             output += '\n\n'+ language['value'].title()
         analysisOutput = '\n\n--------Function showAll--------\n\nWorst Complexity will be O(n) where n is the total no of nodes\n\n 3 iterations were executed twice to filter data for language and interpreters and third loop for creating output which was divided as a sum of no interpreters and the languages that can be spoken'
+        analysisOutput += '\n\nHence, Worst Complexity here will be = {n}'.format(n=len(self.vertices))
         self.printOutput(output)
         self.printAnalysis(analysisOutput)
 
@@ -205,8 +215,10 @@ class Interpreter:
         for response in responseList:
             output += '\n' + response['value'].title() + ' / ' + ' / '.join(response['languages'])
         output += '\n\n'
+        analysisOutput = '\n\n--------Function displayHireList--------\n\nFunction for time complexity is F(n) = (n*m + nlog(n) + n*m) where m is the filtered interepreters and n is total no of nodes\n\nWorst Complexity = O(n^2) if m = n\n\n'
+        analysisOutput += '\n\nHence, Worst Complexity = {m}'.format(m = len(self.vertices) * len(self.vertices))
         self.printOutput(output)
-        self.printAnalysis('\n\n--------Function displayHireList--------\n\nFunction for time complexity is F(n) = (n^2 + nlog(n) + n^2)\n\nWorst Complexity = O(n^2)\n\n')
+        self.printAnalysis(analysisOutput)
 
     def displayCandidates(self, language):
         """
@@ -221,7 +233,9 @@ class Interpreter:
             for outputDataItem in outputData:
                 outputStr += '\n\n{name}'.format(name = outputDataItem['value'].title())
             self.printOutput(outputStr)
-            self.printAnalysis('\n\n--------Function displayCandidates --------\n\nFunction for time complexity is F(n) = (n + n)\n\nWorst Complexity = O(n)\n\n')
+            analysisOutput = '\n\n--------Function displayCandidates --------\n\nFunction for time complexity is F(n) = (n + n)\n\nWorst Complexity = O(n)\n\n'
+            analysisOutput += '\n\nHence, Worst complexity = {n}'.format(n = len(self.vertices))
+            self.printAnalysis(analysisOutput)
 
     def findDirectTranslator(self, langA, langB):
         """
@@ -243,7 +257,9 @@ class Interpreter:
             else:
                 output += 'No'
             self.printOutput(output)
-            self.printAnalysis('\n\n--------Function findDirectTranslator --------\n\nFunction for time complexity is F(n) = (n^2)\n\nWorst Complexity = O(n^2)\n\n')
+            analysisOutput = '\n\n--------Function findDirectTranslator --------\n\nFunction for time complexity is F(n) = (n^2)\n\nWorst Complexity = O(n^2)\n\n'
+            analysisOutput += '\n\nHence, Worst Complexity = {n}'.format(n = len(self.vertices) * len(self.vertices))
+            self.printAnalysis(analysisOutput)
         else:
             output = '\n\n--------Function findDirectTranslator --------\n\nWrong Input either {langA} or {langB} not found.'.format(langA = langA, langB = langB)
             self.printOutput(output)
@@ -271,9 +287,9 @@ class Interpreter:
         if pathFound == True:
             output = '\n\n--------Function findTransRelation --------\n\nLanguage A: {langA}\n\nLanguage B: {langB}\n\nRelated: Yes, {path} '.format(langA = langA, langB = langB, path = " > ".join(respList))
         self.printOutput(output)
-        self.printAnalysis('\n\n--------Function findTransRelation --------\n\nFunction for time complexity is F(t) = f(n) + f(e) where f is a function of traversing each nodes and a function for traversing through each edge\n\nWorst Complexity = O(N + E)')
-        
-        
+        analysisOutput = '\n\n--------Function findTransRelation --------\n\nFunction for time complexity is F(t) = f(n) + f(e) where f is a function of traversing each nodes and a function for traversing through each edge\n\nWorst Complexity = O(N + E)'
+        analysisOutput += '\n\nHence, Worst Complexity = {sum}'.format(sum= len(respList) + len(respList) - 1)
+        self.printAnalysis(analysisOutput)
 
     def findTransRelationPath(self, edgesList, sourceNode, destinationLang, pathArr):
         """

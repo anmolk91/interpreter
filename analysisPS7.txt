@@ -2,27 +2,33 @@
 
 --------Function displayHireList--------
 
-Function for time complexity is F(n) = (n^2 + nlog(n) + n^2)
+Function for time complexity is F(n) = (n*m + nlog(n) + n*m) where m is the filtered interepreters and n is total no of nodes
 
-Worst Complexity = O(n^2)
-
-
-
---------Function displayCandidates --------
-
-Function for time complexity is F(n) = (n + n)
-
-Worst Complexity = O(n^2)
+Worst Complexity = O(n^2) if m = n
 
 
+
+Hence, Worst Complexity = 484
 
 --------Function displayCandidates --------
 
 Function for time complexity is F(n) = (n + n)
 
-Worst Complexity = O(n^2)
+Worst Complexity = O(n)
 
 
+
+Hence, Worst complexity = 22
+
+--------Function displayCandidates --------
+
+Function for time complexity is F(n) = (n + n)
+
+Worst Complexity = O(n)
+
+
+
+Hence, Worst complexity = 22
 
 --------Function findDirectTranslator --------
 
@@ -32,6 +38,8 @@ Worst Complexity = O(n^2)
 
 
 
+Hence, Worst Complexity = 484
+
 --------Function findDirectTranslator --------
 
 Function for time complexity is F(n) = (n^2)
@@ -40,14 +48,20 @@ Worst Complexity = O(n^2)
 
 
 
---------Function findTransRelation --------
-
-Function for time complexity is F(t) = f(n) + f(e) where f is a function of traversing each nodes and a function for traversing through each edge
-
-Worst Complexity = O(N + E)
+Hence, Worst Complexity = 484
 
 --------Function findTransRelation --------
 
 Function for time complexity is F(t) = f(n) + f(e) where f is a function of traversing each nodes and a function for traversing through each edge
 
 Worst Complexity = O(N + E)
+
+Hence, Worst Complexity = 13
+
+--------Function findTransRelation --------
+
+Function for time complexity is F(t) = f(n) + f(e) where f is a function of traversing each nodes and a function for traversing through each edge
+
+Worst Complexity = O(N + E)
+
+Hence, Worst Complexity = 9
