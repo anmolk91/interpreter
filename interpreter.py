@@ -14,7 +14,8 @@ class Interpreter:
     edgesList = None
 
     def readApplication(self, inputFile = 'inputPS7.txt', promptsFile = 'promptsPS7.txt'):
-        """ Reads the file using the file path provided.
+        """ 
+            Reads the file using the file path provided.
             if file paths not provided then takes default path into account
             takes inputFile for the input data containing list of interpreters and languages they speak
             takes promptsFile for the prompts or actions that needs to be performed on the input provided
@@ -164,7 +165,7 @@ class Interpreter:
         for language in filteredLanguages:
             output += '\n\n'+ language['value'].title()
         analysisOutput = '\n\n--------Function showAll--------\n\nWorst Complexity will be O(n) where n is the total no of nodes\n\n 3 iterations were executed twice to filter data for language and interpreters and third loop for creating output which was divided as a sum of no interpreters and the languages that can be spoken'
-        analysisOutput += '\n\nHence, Worst Complexity here will be = {n}'.format(n=len(self.vertices))
+        analysisOutput += '\n\nHence, Runtime Complexity here will be = {n}'.format(n=len(self.vertices))
         self.printOutput(output)
         self.printAnalysis(analysisOutput)
 
@@ -234,7 +235,7 @@ class Interpreter:
                 outputStr += '\n\n{name}'.format(name = outputDataItem['value'].title())
             self.printOutput(outputStr)
             analysisOutput = '\n\n--------Function displayCandidates --------\n\nFunction for time complexity is F(n) = (n + n)\n\nWorst Complexity = O(n)\n\n'
-            analysisOutput += '\n\nHence, Worst complexity = {n}'.format(n = len(self.vertices))
+            analysisOutput += '\n\nHence, Runtime Complexity = {n}'.format(n = len(self.vertices))
             self.printAnalysis(analysisOutput)
 
     def findDirectTranslator(self, langA, langB):
@@ -258,7 +259,7 @@ class Interpreter:
                 output += 'No'
             self.printOutput(output)
             analysisOutput = '\n\n--------Function findDirectTranslator --------\n\nFunction for time complexity is F(n) = (n^2)\n\nWorst Complexity = O(n^2)\n\n'
-            analysisOutput += '\n\nHence, Worst Complexity = {n}'.format(n = len(self.vertices) * len(self.vertices))
+            analysisOutput += '\n\nHence, Runtime Complexity = {n}'.format(n = len(self.vertices) * len(self.vertices))
             self.printAnalysis(analysisOutput)
         else:
             output = '\n\n--------Function findDirectTranslator --------\n\nWrong Input either {langA} or {langB} not found.'.format(langA = langA, langB = langB)
@@ -288,7 +289,7 @@ class Interpreter:
             output = '\n\n--------Function findTransRelation --------\n\nLanguage A: {langA}\n\nLanguage B: {langB}\n\nRelated: Yes, {path} '.format(langA = langA, langB = langB, path = " > ".join(respList))
         self.printOutput(output)
         analysisOutput = '\n\n--------Function findTransRelation --------\n\nFunction for time complexity is F(t) = f(n) + f(e) where f is a function of traversing each nodes and a function for traversing through each edge\n\nWorst Complexity = O(N + E)'
-        analysisOutput += '\n\nHence, Worst Complexity = {sum}'.format(sum= len(respList) + len(respList) - 1)
+        analysisOutput += '\n\nHence, Runtime Complexity (it is a sum of nodes iterated using the edges) = {sum}'.format(sum= len(respList) + len(respList) - 1)
         self.printAnalysis(analysisOutput)
 
     def findTransRelationPath(self, edgesList, sourceNode, destinationLang, pathArr):
