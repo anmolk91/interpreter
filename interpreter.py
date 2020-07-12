@@ -221,7 +221,7 @@ class Interpreter:
             for outputDataItem in outputData:
                 outputStr += '\n\n{name}'.format(name = outputDataItem['value'].title())
             self.printOutput(outputStr)
-            self.printAnalysis('\n\n--------Function displayCandidates --------\n\nFunction for time complexity is F(n) = (n + n)\n\nWorst Complexity = O(n^2)\n\n')
+            self.printAnalysis('\n\n--------Function displayCandidates --------\n\nFunction for time complexity is F(n) = (n + n)\n\nWorst Complexity = O(n)\n\n')
 
     def findDirectTranslator(self, langA, langB):
         """
